@@ -125,3 +125,7 @@ Versions follow SemVer; `package.json`, `herdr-plugin.toml` and the `vX.Y.Z` tag
    and tags `vX.Y.Z`.
 3. `git push --follow-tags`. The Release workflow checks the versions match, builds, and publishes
    a GitHub release with that version's changelog section.
+
+## License
+
+[MIT](LICENSE)

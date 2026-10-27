@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Herdr plugin: fuzzy-pick and launch workspace templates",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vlyamzin/herdr-workspace-launcher.git"

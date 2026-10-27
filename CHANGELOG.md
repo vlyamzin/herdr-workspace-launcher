@@ -4,6 +4,10 @@ All notable changes to this plugin. Format: [Keep a Changelog](https://keepachan
 
 ## [Unreleased]
 
+### Added
+
+- MIT license.
+
 ## [0.1.0] - 2026-10-27
 
 ### Added
