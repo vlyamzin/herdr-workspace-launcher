@@ -1,0 +1,26 @@
+id = "vlyamzin.workspace-launcher"
+name = "Workspace Launcher"
+version = "0.1.0"
+description = "Fuzzy-pick, launch and edit workspace templates from a popup"
+min_herdr_version = "0.9.0"
+platforms = ["linux", "macos"]
+
+[[build]]
+command = ["npm", "ci"]
+
+[[build]]
+command = ["npm", "run", "build"]
+
+[[actions]]
+id = "open"
+title = "Open workspace launcher"
+contexts = ["workspace"]
+command = ["sh", "-c", "exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin \"$HERDR_PLUGIN_ID\" --entrypoint picker"]
+
+[[panes]]
+id = "picker"
+title = "Workspace launcher"
+placement = "popup"
+width = "85%"
+height = "80%"
+command = ["node", "dist/picker.js"]

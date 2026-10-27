@@ -1,0 +1,26 @@
+{
+  "name": "herdr-workspace-launcher",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Herdr plugin: fuzzy-pick and launch workspace templates",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vlyamzin/herdr-workspace-launcher.git"
+  },
+  "homepage": "https://github.com/vlyamzin/herdr-workspace-launcher#readme",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "version": "node scripts/sync-version.mjs && git add herdr-plugin.toml CHANGELOG.md"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "smol-toml": "1.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "6.0.3"
+  }
+}

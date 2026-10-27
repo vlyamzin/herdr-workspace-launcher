@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check tag matches package.json and herdr-plugin.toml
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p 'require("./package.json").version')"
+          manifest="$(sed -n 's/^version = "\(.*\)"$/\1/p' herdr-plugin.toml)"
+          if [ "$tag" != "$pkg" ] || [ "$tag" != "$manifest" ]; then
+            echo "::error::tag $GITHUB_REF_NAME, package.json $pkg and herdr-plugin.toml $manifest must match"
+            exit 1
+          fi
+
+      # Herdr builds from source on install; this only proves the tagged commit builds.
+      - run: npm ci
+      - run: npm run build
+
+      - name: Create GitHub release from CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            index($0, "## [" v "]") == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          flags=""
+          case "$version" in *-*) flags="--prerelease" ;; esac
+          if [ -s notes.md ] && grep -q '[^[:space:]]' notes.md; then
+            gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md $flags
+          else
+            gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --generate-notes $flags
+          fi
